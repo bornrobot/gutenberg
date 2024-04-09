@@ -24,6 +24,7 @@ import fontSize from './font-size';
 import textAlign from './text-align';
 import border from './border';
 import position from './position';
+import variation from './variation';
 import layout from './layout';
 import childLayout from './layout-child';
 import contentLockUI from './content-lock-ui';
@@ -59,6 +60,7 @@ createBlockListBlockFilter( [
 	fontSize,
 	border,
 	position,
+	variation,
 	childLayout,
 ] );
 createBlockSaveFilter( [
