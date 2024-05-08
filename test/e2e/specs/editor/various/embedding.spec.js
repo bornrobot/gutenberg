@@ -5,6 +5,7 @@ const { test, expect } = require( '@wordpress/e2e-test-utils-playwright' );
 
 /** @typedef {import('@playwright/test').Page} Page */
 /** @typedef {import('@wordpress/e2e-test-utils-playwright').Editor} Editor */
+/** @typedef {import('@wordpress/e2e-test-utils-playwright').PageUtils} PageUtils */
 
 const EMBED_URLS = [
 	'/oembed/1.0/proxy',
@@ -263,6 +264,7 @@ class EmbedUtils {
 	#page;
 	/** @type {Editor} */
 	#editor;
+	/** @type {PageUtils} */
 	#pageUtils;
 
 	constructor( { page, editor, pageUtils } ) {
