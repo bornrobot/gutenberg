@@ -268,7 +268,7 @@ function InserterMenu(
 	] );
 
 	// When the pattern panel is showing, we want to use zoom out mode
-	useZoomOut( showPatternPanel );
+	useZoomOut( selectedTab === 'patterns' );
 
 	const handleSetSelectedTab = ( value ) => {
 		// If no longer on patterns tab remove the category setting.
