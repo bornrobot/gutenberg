@@ -60,7 +60,6 @@ function BlockSelectionButton( { clientId, rootClientId } ) {
 				__unstableGetEditorMode,
 				getNextBlockClientId,
 				getPreviousBlockClientId,
-				canRemoveBlock,
 				canMoveBlock,
 			} = select( blockEditorStore );
 			const { getActiveBlockVariation, getBlockType } =
@@ -71,20 +70,6 @@ function BlockSelectionButton( { clientId, rootClientId } ) {
 			const orientation =
 				getBlockListSettings( rootClientId )?.orientation;
 			const match = getActiveBlockVariation( name, attributes );
-			const isBlockTemplatePart =
-				blockType?.name === 'core/template-part';
-
-			const nextClientId = getNextBlockClientId();
-			if ( nextClientId ) {
-				const { name: nextName } = getBlock( nextClientId );
-				const nextBlockType = getBlockType( nextName );
-			}
-
-			const prevClientId = getPreviousBlockClientId();
-			if ( prevClientId ) {
-				const { name: prevName } = getBlock( prevClientId );
-				const prevBlockType = getBlockType( prevName );
-			}
 
 			return {
 				blockMovingMode: hasBlockMovingClientId(),
@@ -97,12 +82,13 @@ function BlockSelectionButton( { clientId, rootClientId } ) {
 					orientation
 				),
 				canMove: canMoveBlock( clientId, rootClientId ),
+				getNextBlockClientId,
+				getPreviousBlockClientId,
 			};
 		},
 		[ clientId, rootClientId ]
 	);
-	const { label, icon, blockMovingMode, editorMode, canRemove, canMove } =
-		selected;
+	const { label, icon, blockMovingMode, editorMode, canMove } = selected;
 	const { setNavigationMode, removeBlock } = useDispatch( blockEditorStore );
 	const ref = useRef();
 
