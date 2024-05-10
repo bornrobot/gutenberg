@@ -322,7 +322,6 @@ $block-inserter-tabs-height: 44px;
 	@include break-medium {
 		padding: 0;
 		left: 100%;
-		width: 300px;
 	}
 }
 
@@ -638,8 +637,7 @@ $block-inserter-tabs-height: 44px;
 
 
 .block-editor-inserter__mobile-tab-navigation {
-	padding: $grid-unit-20;
-	padding-top: 0;
+	padding: 0;
 	height: 100%;
 
 	> * {
