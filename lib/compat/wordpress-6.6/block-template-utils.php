@@ -340,6 +340,23 @@ function gutenberg_get_block_templates( $query = array(), $template_type = 'wp_t
 		foreach ( $template_files as $template_file ) {
 			$query_result[] = _build_block_template_result_from_file( $template_file, $template_type );
 		}
+
+		/*
+		 * Add templates registered in the template registry. Filtering out the ones which have a theme file.
+		 */
+		$registered_templates          = WP_Block_Templates_Registry::get_instance()->get_by_query( $template_type, $query );
+		$matching_registered_templates = array_filter(
+			$registered_templates,
+			function ( $registered_template ) use ( $template_files ) {
+				foreach ( $template_files as $template_file ) {
+					if ( $template_file['slug'] === $registered_template->slug ) {
+						return false;
+					}
+				}
+				return true;
+			}
+		);
+		$query_result                  = array_merge( $query_result, $matching_registered_templates );
 	}
 
 	/**
