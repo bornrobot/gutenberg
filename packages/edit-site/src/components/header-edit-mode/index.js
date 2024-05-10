@@ -2,12 +2,14 @@
  * WordPress dependencies
  */
 import { privateApis as editorPrivateApis } from '@wordpress/editor';
-import { useSelect } from '@wordpress/data';
+import { useSelect, useDispatch } from '@wordpress/data';
+import { Button } from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
 import SiteEditorMoreMenu from './more-menu';
+import SiteIcon from '../site-icon';
 import { unlock } from '../../lock-unlock';
 import SaveButton from '../save-button';
 import { isPreviewingTheme } from '../../utils/is-previewing-theme';
@@ -29,6 +31,7 @@ function Header( { setEntitiesSavedStatesCallback } ) {
 			).getEditorCanvasContainerView(),
 		};
 	}, [] );
+	const { setCanvasMode } = unlock( useDispatch( editSiteStore ) );
 
 	return (
 		<EditorHeader
@@ -43,6 +46,12 @@ function Header( { setEntitiesSavedStatesCallback } ) {
 					: undefined
 			}
 		>
+			<Button
+				className="edit-site-layout__view-mode-toggle"
+				onClick={ () => setCanvasMode( 'view' ) }
+			>
+				<SiteIcon className="edit-site-layout__view-mode-toggle-icon" />
+			</Button>
 			<SiteEditorMoreMenu />
 		</EditorHeader>
 	);
