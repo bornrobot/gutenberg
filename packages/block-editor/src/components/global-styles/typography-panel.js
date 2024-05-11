@@ -223,8 +223,6 @@ export default function TypographyPanel( {
 		fontStyle: newFontStyle,
 		fontWeight: newFontWeight,
 	} ) => {
-		console.debug(fontStyle);
-		console.debug(fontWeight);
 		onChange( {
 			...value,
 			typography: {
