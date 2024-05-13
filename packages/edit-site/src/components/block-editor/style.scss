@@ -17,8 +17,17 @@
 .edit-site-editor-canvas__block-list.is-navigation-block {
 	padding: $grid-unit-30;
 }
+/* stylelint-disable */
+::view-transition-old(frame),
+::view-transition-new(frame) {
+  animation-duration: 0;
+}
+/* stylelint-enable */
 
 .edit-site-visual-editor {
+	/* stylelint-disable */
+	view-transition-name: frame;
+	/* stylelint-enable */
 	position: relative;
 	height: 100%;
 	overflow: hidden;
