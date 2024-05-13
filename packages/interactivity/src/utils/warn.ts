@@ -1,8 +1,7 @@
 const logged = new Set();
 
 export const warn = ( message ) => {
-	// @ts-expect-error
-	if ( typeof SCRIPT_DEBUG !== 'undefined' && SCRIPT_DEBUG === true ) {
+	if ( globalThis.SCRIPT_DEBUG ) {
 		if ( logged.has( message ) ) {
 			return;
 		}
