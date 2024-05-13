@@ -76,15 +76,3 @@ function gutenberg_add_class_list_to_public_post_types() {
 	}
 }
 add_action( 'rest_api_init', 'gutenberg_add_class_list_to_public_post_types' );
-
-if ( ! function_exists( 'gutenberg_register_edit_site_export_controller_endpoints' ) ) {
-	/**
-	 * Registers the Edit Site Export REST API routes.
-	 */
-	function gutenberg_register_edit_site_export_controller_endpoints() {
-		$edit_site_export_controller = new Gutenberg_REST_Edit_Site_Export_Controller_6_6();
-		$edit_site_export_controller->register_routes();
-	}
-}
-
-add_action( 'rest_api_init', 'gutenberg_register_edit_site_export_controller_endpoints' );
