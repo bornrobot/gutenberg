@@ -377,3 +377,78 @@ function gutenberg_get_block_templates( $query = array(), $template_type = 'wp_t
 	 */
 	return apply_filters( 'get_block_templates', $query_result, $query, $template_type );
 }
+
+/**
+ * Retrieves a single unified template object using its id.
+ *
+ * @since 5.8.0
+ *
+ * @param string $id            Template unique identifier (example: 'theme_slug//template_slug').
+ * @param string $template_type Optional. Template type. Either 'wp_template' or 'wp_template_part'.
+ *                              Default 'wp_template'.
+ * @return WP_Block_Template|null Template.
+ */
+function gutenberg_get_block_template( $id, $template_type = 'wp_template' ) {
+	/**
+	 * Filters the block template object before the query takes place.
+	 *
+	 * Return a non-null value to bypass the WordPress queries.
+	 *
+	 * @since 5.9.0
+	 *
+	 * @param WP_Block_Template|null $block_template Return block template object to short-circuit the default query,
+	 *                                               or null to allow WP to run its normal queries.
+	 * @param string                 $id             Template unique identifier (example: 'theme_slug//template_slug').
+	 * @param string                 $template_type  Template type. Either 'wp_template' or 'wp_template_part'.
+	 */
+	$block_template = apply_filters( 'pre_get_block_template', null, $id, $template_type );
+	if ( ! is_null( $block_template ) ) {
+		return $block_template;
+	}
+
+	$parts = explode( '//', $id, 2 );
+	if ( count( $parts ) < 2 ) {
+		return null;
+	}
+	list( $theme, $slug ) = $parts;
+	$wp_query_args        = array(
+		'post_name__in'  => array( $slug ),
+		'post_type'      => $template_type,
+		'post_status'    => array( 'auto-draft', 'draft', 'publish', 'trash' ),
+		'posts_per_page' => 1,
+		'no_found_rows'  => true,
+		'tax_query'      => array(
+			array(
+				'taxonomy' => 'wp_theme',
+				'field'    => 'name',
+				'terms'    => $theme,
+			),
+		),
+	);
+	$template_query       = new WP_Query( $wp_query_args );
+	$posts                = $template_query->posts;
+
+	if ( count( $posts ) > 0 ) {
+		$template = _build_block_template_result_from_post( $posts[0] );
+
+		if ( ! is_wp_error( $template ) ) {
+			return $template;
+		}
+	}
+
+	$block_template = get_block_file_template( $id, $template_type );
+	if ( ! $block_template ) {
+		$block_template = WP_Block_Templates_Registry::get_instance()->get_by_slug( $template_type, $slug );
+	}
+
+	/**
+	 * Filters the queried block template object after it's been fetched.
+	 *
+	 * @since 5.9.0
+	 *
+	 * @param WP_Block_Template|null $block_template The found block template, or null if there isn't one.
+	 * @param string                 $id             Template unique identifier (example: 'theme_slug//template_slug').
+	 * @param string                 $template_type  Template type. Either 'wp_template' or 'wp_template_part'.
+	 */
+	return apply_filters( 'get_block_template', $block_template, $id, $template_type );
+}
