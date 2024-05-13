@@ -1019,7 +1019,7 @@ export function usePostActions( postType, onActionPerformed ) {
 			isTemplateOrTemplatePart && deleteTemplateAction,
 			! isTemplateOrTemplatePart && permanentlyDeletePostAction,
 			postRevisionsAction,
-			process.env.IS_GUTENBERG_PLUGIN
+			globalThis.IS_GUTENBERG_PLUGIN
 				? ! isTemplateOrTemplatePart &&
 				  ! isPattern &&
 				  duplicatePostAction
