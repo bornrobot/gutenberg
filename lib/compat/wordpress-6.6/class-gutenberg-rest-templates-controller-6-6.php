@@ -127,6 +127,7 @@ class Gutenberg_REST_Templates_Controller_6_6 extends Gutenberg_REST_Templates_C
 	public function get_item( $request ) {
 		if ( isset( $request['source'] ) && 'theme' === $request['source'] ) {
 			$template = get_block_file_template( $request['id'], $this->post_type );
+			$template = _gutenberg_add_template_details_from_registration( $this->post_type, $template );
 		} elseif ( isset( $request['source'] ) && 'plugin' === $request['source'] ) {
 			list( $namespace, $slug ) = explode( '//', $request['id'] );
 			$template                 = WP_Block_Templates_Registry::get_instance()->get_by_slug( $this->post_type, $slug );

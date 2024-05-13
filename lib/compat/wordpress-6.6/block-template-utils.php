@@ -228,6 +228,14 @@ function _gutenberg_get_block_templates_files( $template_type, $query = array() 
 	return array_values( $template_files );
 }
 
+function _gutenberg_add_template_details_from_registration( $template_type, $template_object_from_file ) {
+	$registered_template = WP_Block_Templates_Registry::get_instance()->get_by_slug( $template_type, $template_object_from_file->slug );
+	if ( $registered_template ) {
+		$template_object_from_file->plugin = $registered_template->plugin;
+	}
+	return $template_object_from_file;
+}
+
 /**
  * Retrieves a list of unified template objects based on a query.
  *
@@ -327,10 +335,11 @@ function gutenberg_get_block_templates( $query = array(), $template_type = 'wp_t
 			continue;
 		}
 
-		$query_result[] = $template;
+		$query_result[] = _gutenberg_add_template_details_from_registration( $template_type, $template );
 	}
 
 	if ( ! isset( $query['wp_id'] ) ) {
+
 		/*
 		 * If the query has found some use templates, those have priority
 		 * over the theme-provided ones, so we skip querying and building them.
@@ -338,7 +347,9 @@ function gutenberg_get_block_templates( $query = array(), $template_type = 'wp_t
 		$query['slug__not_in'] = wp_list_pluck( $query_result, 'slug' );
 		$template_files        = _gutenberg_get_block_templates_files( $template_type, $query );
 		foreach ( $template_files as $template_file ) {
-			$query_result[] = _build_block_template_result_from_file( $template_file, $template_type );
+			$template_object_from_file = _build_block_template_result_from_file( $template_file, $template_type );
+
+			$query_result[] = _gutenberg_add_template_details_from_registration( $template_type, $template_object_from_file );
 		}
 
 		/*
@@ -440,6 +451,8 @@ function gutenberg_get_block_template( $id, $template_type = 'wp_template' ) {
 	if ( ! $block_template ) {
 		$block_template = WP_Block_Templates_Registry::get_instance()->get_by_slug( $template_type, $slug );
 	}
+
+	$block_template = _gutenberg_add_template_details_from_registration( $template_type, $block_template );
 
 	/**
 	 * Filters the queried block template object after it's been fetched.
