@@ -162,7 +162,7 @@ class Gutenberg_REST_Templates_Controller_6_6 extends Gutenberg_REST_Templates_C
 			wp_delete_post( $template->wp_id, true );
 			$request->set_param( 'context', 'edit' );
 
-			$template = get_block_template( $request['id'], $this->post_type );
+			$template = gutenberg_get_block_template( $request['id'], $this->post_type );
 			$response = $this->prepare_item_for_response( $template, $request );
 
 			return rest_ensure_response( $response );
@@ -534,7 +534,7 @@ class Gutenberg_REST_Templates_Controller_6_6 extends Gutenberg_REST_Templates_C
 			case 'plugin':
 				$plugins     = get_plugins();
 				$plugin_name = isset( $template_object->plugin ) ? $template_object->plugin . '/' . $template_object->plugin : $template_object->theme;
-				$plugin  = $plugins[ plugin_basename( sanitize_text_field( $plugin_name . '.php' ) ) ];
+				$plugin      = $plugins[ plugin_basename( sanitize_text_field( $plugin_name . '.php' ) ) ];
 				return empty( $plugin['Name'] ) ? $template_object->theme : $plugin['Name'];
 			case 'site':
 				return get_bloginfo( 'name' );
