@@ -20,7 +20,6 @@ final class WP_Block_Templates_Registry {
 			$template_name = $template->name;
 		}
 
-
 		if ( ! is_string( $template_name ) ) {
 			_doing_it_wrong(
 				__METHOD__,
@@ -227,8 +226,35 @@ final class WP_Block_Templates_Registry {
 		return isset( $this->registered_block_templates[ $template_type ][ $template_name ] );
 	}
 
-	public function unregister( $template_name ) {
-		// @todo
+	/**
+	 * Unregisters a block template.
+	 *
+	 * @since 6.6.0
+	 *
+	 * @param string $template_type Template type, either `wp_template` or `wp_template_part`.
+	 * @param string|WP_Block_Template $name Block template name including namespace, or alternatively
+	 *                                       a complete WP_Block_Template instance.
+	 * @return WP_Block_Template|false The unregistered block template on success, or false on failure.
+	 */
+	public function unregister( $template_type, $template_name ) {
+		if ( $template_name instanceof WP_Block_Type ) {
+			$template_name = $template_name->name;
+		}
+
+		if ( ! $this->is_registered( $template_type, $template_name ) ) {
+			_doing_it_wrong(
+				__METHOD__,
+				/* translators: %s: Block name. */
+				sprintf( __( 'Block template "%s" is not registered.', 'gutenberg' ), $template_name ),
+				'6.6.0'
+			);
+			return false;
+		}
+
+		$unregistered_block_template = $this->registered_block_templates[ $template_type ][ $template_name ];
+		unset( $this->registered_block_templates[ $template_type ][ $template_name ] );
+
+		return $unregistered_block_template;
 	}
 
 	/**
