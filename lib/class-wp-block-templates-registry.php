@@ -2,16 +2,51 @@
 /**
  * Block template functions.
  *
- * @package gutenberg
+ * @package Gutenberg
+ * @since 6.6.0
  */
 
+if ( class_exists( 'WP_Block_Templates_Registry' ) ) {
+	return;
+}
+
+/**
+ * Core class used for interacting with block templates and block template parts.
+ *
+ * @since 6.6.0
+ */
 final class WP_Block_Templates_Registry {
+	/**
+	 * Registered block templates, as `$name => $instance` pairs.
+	 *
+	 * @since 6.6.0
+	 * @var WP_Block_Type[]
+	 */
 	private $registered_block_templates = array(
 		'wp_template'      => array(),
 		'wp_template_part' => array(),
 	);
-	private static $instance            = null;
 
+	/**
+	 * Container for the main instance of the class.
+	 *
+	 * @since 6.6.0
+	 * @var WP_Block_Templates_Registry|null
+	 */
+	private static $instance = null;
+
+	/**
+	 * Registers a block template.
+	 *
+	 * @since 6.6.0
+	 *
+	 * @param string|WP_Block_Template $template_name Block template name including namespace, or alternatively
+	 *                                                a complete WP_Block_Template instance. In case a WP_Block_Template
+	 *                                                is provided, the $args parameter will be ignored.
+	 * @param string                   $template_type Template type, either `wp_template` or `wp_template_part`.
+	 * @param array                    $args          Optional. Array of block template arguments.
+	 * @return WP_Block_Template|false The registered block template on success, or false on failure.
+	 */
 	public function register( $template_name, $template_type, $args = array() ) {
 
 		$template = null;
@@ -157,7 +192,7 @@ final class WP_Block_Templates_Registry {
 	}
 
 	/**
-	 * Retrieves all registered block templates by type.
+	 * Retrieves registered block templates matching a query.
 	 *
 	 * @since 6.6.0
 	 *
