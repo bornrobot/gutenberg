@@ -218,9 +218,8 @@ export default function Editor( { isLoading, onClick } ) {
 				case 'move-to-trash':
 					{
 						history.push( {
-							path: '/' + items[ 0 ].type,
 							postId: undefined,
-							postType: undefined,
+							postType: items[ 0 ].type,
 							canvas: 'view',
 						} );
 					}
@@ -246,7 +245,6 @@ export default function Editor( { isLoading, onClick } ) {
 										label: __( 'Edit' ),
 										onClick: () => {
 											history.push( {
-												path: undefined,
 												postId: newItem.id,
 												postType: newItem.type,
 												canvas: 'edit',
