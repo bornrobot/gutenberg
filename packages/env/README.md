@@ -240,13 +240,18 @@ You should only have to translate `port` and `pathMappings` to the format used b
 
 ```json
 {
-	"name": "Listen for XDebug",
-	"type": "php",
-	"request": "launch",
-	"port": 9003,
-	"pathMappings": {
-		"/var/www/html/wp-content/plugins/gutenberg": "${workspaceFolder}/"
+	"version": "0.2.0",
+  	"configurations": [
+	{
+		"name": "Listen for XDebug",
+		"type": "php",
+		"request": "launch",
+		"port": 9003,
+		"pathMappings": {
+			"/var/www/html/wp-content/plugins/gutenberg": "${workspaceFolder}/"
+		}
 	}
+  ]
 }
 ```
 
