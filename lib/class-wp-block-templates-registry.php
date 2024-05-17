@@ -100,22 +100,24 @@ if ( ! class_exists( 'WP_Block_Templates_Registry' ) ) {
 			}
 
 			if ( ! $template ) {
-				$theme_name               = get_stylesheet();
+				$theme_name = get_stylesheet();
+				$slug       = array_key_exists( 'slug', $args ) ? $args['slug'] : explode( '//', $template_name )[1];
+
 				$template                 = new WP_Block_Template();
-				$template->id             = $theme_name . '//' . $args['slug'];
+				$template->id             = $theme_name . '//' . $slug;
 				$template->theme          = $theme_name; // @todo If not attached to the theme, this should be the plugin URI.
 				$template->plugin         = array_key_exists( 'plugin', $args ) ? $args['plugin'] : '';
 				$template->author         = null;
 				$template->content        = array_key_exists( 'path', $args ) ? file_get_contents( $args['path'] ) : '';
 				$template->source         = 'plugin';
-				$template->slug           = array_key_exists( 'slug', $args ) ? $args['slug'] : '';
+				$template->slug           = $slug;
 				$template->type           = $template_type;
 				$template->title          = array_key_exists( 'title', $args ) ? $args['title'] : '';
 				$template->description    = array_key_exists( 'description', $args ) ? $args['description'] : '';
 				$template->status         = 'publish';
 				$template->has_theme_file = true;
 				$template->origin         = 'plugin';
-				$template->is_custom      = false;
+				$template->is_custom      = true;
 				$template->post_types     = array_key_exists( 'post_types', $args ) ? $args['post_types'] : '';
 				$template->area           = 'wp_template_part' === $template_type && array_key_exists( 'area', $args ) ? $args['area'] : '';
 			}
