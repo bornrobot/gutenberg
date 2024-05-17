@@ -224,7 +224,7 @@ if ( ! class_exists( 'WP_Block_Templates_Registry' ) ) {
 					unset( $all_templates[ $template_name ] );
 				}
 
-				if ( 'wp_template_part' === $template_type && $template->area !== $area ) {
+				if ( 'wp_template_part' === $template_type && isset( $area ) && $template->area !== $area ) {
 					unset( $all_templates[ $template_name ] );
 				}
 
