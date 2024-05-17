@@ -16,22 +16,29 @@ export default {
 		return args.key;
 	},
 	getValue( { registry, context, args } ) {
+		const postId = context.postId
+			? context.postId
+			: registry.select( editorStore ).getCurrentPostId();
 		const postType = context.postType
 			? context.postType
 			: registry.select( editorStore ).getCurrentPostType();
 
 		return registry
 			.select( coreDataStore )
-			.getEditedEntityRecord( 'postType', postType, context.postId )
-			.meta?.[ args.key ];
+			.getEditedEntityRecord( 'postType', postType, postId ).meta?.[
+			args.key
+		];
 	},
 	setValue( { registry, context, args, value } ) {
+		const postId = context.postId
+			? context.postId
+			: registry.select( editorStore ).getCurrentPostId();
 		const postType = context.postType
 			? context.postType
 			: registry.select( editorStore ).getCurrentPostType();
 		registry
 			.dispatch( coreDataStore )
-			.editEntityRecord( 'postType', postType, context.postId, {
+			.editEntityRecord( 'postType', postType, postId, {
 				meta: {
 					[ args.key ]: value,
 				},
